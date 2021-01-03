@@ -70,7 +70,7 @@ type Config struct {
 	AllowIP                  AllowIPConfig               `toml:"allowed_ips"`
 	ForwardFile              string                      `toml:"forwarding_rules"`
 	CloakFile                string                      `toml:"cloaking_rules"`
-	CaptivePortalFile        string                      `toml:"captive_portal_handler"`
+	CaptivePortals           CaptivePortalsConfig        `toml:"captive_portals"`
 	StaticsConfig            map[string]StaticConfig     `toml:"static"`
 	SourcesConfig            map[string]SourceConfig     `toml:"sources"`
 	BrokenImplementations    BrokenImplementationsConfig `toml:"broken_implementations"`
@@ -147,8 +147,11 @@ func newConfig() Config {
 		BrokenImplementations: BrokenImplementationsConfig{
 			FragmentsBlocked: []string{
 				"cisco", "cisco-ipv6", "cisco-familyshield", "cisco-familyshield-ipv6",
-				"cleanbrowsing-adult", "cleanbrowsing-family-ipv6", "cleanbrowsing-family", "cleanbrowsing-security",
+				"cleanbrowsing-adult", "cleanbrowsing-adult-ipv6", "cleanbrowsing-family", "cleanbrowsing-family-ipv6", "cleanbrowsing-security", "cleanbrowsing-security-ipv6",
 			},
+		},
+		AnonymizedDNS: AnonymizedDNSConfig{
+			DirectCertFallback: true,
 		},
 	}
 }
@@ -272,7 +275,12 @@ type DNS64Config struct {
 	Resolvers []string `toml:"resolver"`
 }
 
+type CaptivePortalsConfig struct {
+	MapFile string `toml:"map_file"`
+}
+
 type ConfigFlags struct {
+	Resolve                 *string
 	List                    *bool
 	ListAll                 *bool
 	JSONOutput              *bool
@@ -310,6 +318,16 @@ func ConfigLoad(proxy *Proxy, flags *ConfigFlags) error {
 	if err != nil {
 		return err
 	}
+
+	if flags.Resolve != nil && len(*flags.Resolve) > 0 {
+		addr := "127.0.0.1:53"
+		if len(config.ListenAddresses) > 0 {
+			addr = config.ListenAddresses[0]
+		}
+		Resolve(addr, *flags.Resolve, len(config.ServerNames) == 1)
+		os.Exit(0)
+	}
+
 	if err := cdFileDir(foundConfigFile); err != nil {
 		return err
 	}
@@ -579,7 +597,7 @@ func ConfigLoad(proxy *Proxy, flags *ConfigFlags) error {
 
 	proxy.forwardFile = config.ForwardFile
 	proxy.cloakFile = config.CloakFile
-	proxy.captivePortalFile = config.CaptivePortalFile
+	proxy.captivePortalMapFile = config.CaptivePortals.MapFile
 
 	allWeeklyRanges, err := ParseAllWeeklyRanges(config.AllWeeklyRanges)
 	if err != nil {
@@ -594,7 +612,7 @@ func ConfigLoad(proxy *Proxy, flags *ConfigFlags) error {
 		}
 		proxy.routes = &routes
 	}
-	proxy.skipAnonIncompatbibleResolvers = config.AnonymizedDNS.SkipIncompatible
+	proxy.skipAnonIncompatibleResolvers = config.AnonymizedDNS.SkipIncompatible
 	proxy.anonDirectCertFallback = config.AnonymizedDNS.DirectCertFallback
 
 	if config.DoHClientX509AuthLegacy.Creds != nil {
@@ -802,10 +820,15 @@ func (config *Config) loadSources(proxy *Proxy) error {
 		}
 		proxy.registeredServers = append(proxy.registeredServers, RegisteredServer{name: serverName, stamp: stamp})
 	}
-	rand.Shuffle(len(proxy.registeredServers), func(i, j int) {
-		proxy.registeredServers[i], proxy.registeredServers[j] = proxy.registeredServers[j], proxy.registeredServers[i]
-	})
 	proxy.updateRegisteredServers()
+	rs1 := proxy.registeredServers
+	rs2 := proxy.serversInfo.registeredServers
+	rand.Shuffle(len(rs1), func(i, j int) {
+		rs1[i], rs1[j] = rs1[j], rs1[i]
+	})
+	rand.Shuffle(len(rs2), func(i, j int) {
+		rs2[i], rs2[j] = rs2[j], rs2[i]
+	})
 	return nil
 }
 

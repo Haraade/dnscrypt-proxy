@@ -19,6 +19,7 @@ func (plugin *PluginCaptivePortal) Description() string {
 
 func (plugin *PluginCaptivePortal) Init(proxy *Proxy) error {
 	plugin.captivePortalMap = proxy.captivePortalMap
+	dlog.Notice("Captive portals handler enabled")
 	return nil
 }
 
@@ -38,7 +39,6 @@ func (plugin *PluginCaptivePortal) Eval(pluginsState *PluginsState, msg *dns.Msg
 	if synth := HandleCaptivePortalQuery(msg, question, ips); synth != nil {
 		pluginsState.synthResponse = synth
 		pluginsState.action = PluginsActionSynth
-		dlog.Notice("Response to captive portal query synthesized")
 	}
 	return nil
 }

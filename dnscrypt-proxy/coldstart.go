@@ -59,39 +59,22 @@ func HandleCaptivePortalQuery(msg *dns.Msg, question *dns.Question, ips *Captive
 		}
 	} else if question.Qtype == dns.TypeAAAA {
 		for _, xip := range *ips {
-			if ip := xip.To16(); ip != nil {
-				rr := new(dns.AAAA)
-				rr.Hdr = dns.RR_Header{Name: question.Name, Rrtype: dns.TypeAAAA, Class: dns.ClassINET, Ttl: ttl}
-				rr.AAAA = ip
-				respMsg.Answer = append(respMsg.Answer, rr)
+			if xip.To4() == nil {
+				if ip := xip.To16(); ip != nil {
+					rr := new(dns.AAAA)
+					rr.Hdr = dns.RR_Header{Name: question.Name, Rrtype: dns.TypeAAAA, Class: dns.ClassINET, Ttl: ttl}
+					rr.AAAA = ip
+					respMsg.Answer = append(respMsg.Answer, rr)
+				}
 			}
 		}
-	} else if question.Qtype == dns.TypeHTTPS {
-		rr := new(dns.HTTPS)
-		rr.Hdr = dns.RR_Header{Name: question.Name, Rrtype: dns.TypeHTTPS, Class: dns.ClassINET, Ttl: ttl}
-		v4 := new(dns.SVCBIPv4Hint)
-		v6 := new(dns.SVCBIPv6Hint)
-		for _, xip := range *ips {
-			if ip := xip.To4(); ip != nil {
-				v4.Hint = append(v4.Hint, ip)
-			} else if ip := xip.To16(); ip != nil {
-				v6.Hint = append(v6.Hint, ip)
-			}
-		}
-		if len(v4.Hint) > 0 {
-			rr.Value = append(rr.Value, v4)
-		}
-		if len(v6.Hint) > 0 {
-			rr.Value = append(rr.Value, v6)
-		}
-		respMsg.Answer = []dns.RR{rr}
 	}
 
 	qType, ok := dns.TypeToString[question.Qtype]
 	if !ok {
 		qType = fmt.Sprint(question.Qtype)
 	}
-	dlog.Noticef("Query for captive portal detection: [%v] (%v)", question.Name, qType)
+	dlog.Infof("Query for captive portal detection: [%v] (%v)", question.Name, qType)
 	return respMsg
 }
 
@@ -130,7 +113,6 @@ func handleColdStartClient(clientPc *net.UDPConn, cancelChannel chan struct{}, i
 	}
 	if response, err := respMsg.Pack(); err == nil {
 		clientPc.WriteTo(response, clientAddr)
-		dlog.Notice("Response to coldstart captive portal query synthesized")
 	}
 	return false
 }
@@ -154,10 +136,10 @@ func addColdStartListener(proxy *Proxy, ipsMap *CaptivePortalMap, listenAddrStr 
 }
 
 func ColdStart(proxy *Proxy) (*CaptivePortalHandler, error) {
-	if len(proxy.captivePortalFile) == 0 {
+	if len(proxy.captivePortalMapFile) == 0 {
 		return nil, nil
 	}
-	bin, err := ReadTextFile(proxy.captivePortalFile)
+	bin, err := ReadTextFile(proxy.captivePortalMapFile)
 	if err != nil {
 		dlog.Warn(err)
 		return nil, err
