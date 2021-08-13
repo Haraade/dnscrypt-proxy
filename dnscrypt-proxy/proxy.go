@@ -369,14 +369,14 @@ func (proxy *Proxy) udpListener(clientPc *net.UDPConn) {
 			return
 		}
 		packet := buffer[:length]
+		if !proxy.clientsCountInc() {
+			dlog.Warnf("Too many incoming connections (max=%d)", proxy.maxClients)
+			proxy.processIncomingQuery("udp", proxy.mainProto, packet, &clientAddr, clientPc, time.Now(), true) // respond synchronously, but only to cached/synthesized queries
+			continue
+		}
 		go func() {
-			start := time.Now()
-			if !proxy.clientsCountInc() {
-				dlog.Warnf("Too many incoming connections (max=%d)", proxy.maxClients)
-				return
-			}
 			defer proxy.clientsCountDec()
-			proxy.processIncomingQuery("udp", proxy.mainProto, packet, &clientAddr, clientPc, start)
+			proxy.processIncomingQuery("udp", proxy.mainProto, packet, &clientAddr, clientPc, time.Now(), false)
 		}()
 	}
 }
@@ -388,23 +388,24 @@ func (proxy *Proxy) tcpListener(acceptPc *net.TCPListener) {
 		if err != nil {
 			continue
 		}
+		if !proxy.clientsCountInc() {
+			dlog.Warnf("Too many incoming connections (max=%d)", proxy.maxClients)
+			clientPc.Close()
+			continue
+		}
 		go func() {
-			start := time.Now()
 			defer clientPc.Close()
-			if !proxy.clientsCountInc() {
-				dlog.Warnf("Too many incoming connections (max=%d)", proxy.maxClients)
-				return
-			}
 			defer proxy.clientsCountDec()
 			if err := clientPc.SetDeadline(time.Now().Add(proxy.timeout)); err != nil {
 				return
 			}
+			start := time.Now()
 			packet, err := ReadPrefixed(&clientPc)
 			if err != nil {
 				return
 			}
 			clientAddr := clientPc.RemoteAddr()
-			proxy.processIncomingQuery("tcp", "tcp", packet, &clientAddr, clientPc, start)
+			proxy.processIncomingQuery("tcp", "tcp", packet, &clientAddr, clientPc, start, false)
 		}()
 	}
 }
@@ -572,7 +573,7 @@ func (proxy *Proxy) clientsCountDec() {
 	}
 }
 
-func (proxy *Proxy) processIncomingQuery(clientProto string, serverProto string, query []byte, clientAddr *net.Addr, clientPc net.Conn, start time.Time) (response []byte) {
+func (proxy *Proxy) processIncomingQuery(clientProto string, serverProto string, query []byte, clientAddr *net.Addr, clientPc net.Conn, start time.Time, onlyCached bool) (response []byte) {
 	if len(query) < MinDNSPacketSize {
 		return
 	}
@@ -601,6 +602,12 @@ func (proxy *Proxy) processIncomingQuery(clientProto string, serverProto string,
 			pluginsState.ApplyLoggingPlugins(&proxy.pluginsGlobals)
 			return
 		}
+	}
+	if onlyCached {
+		if len(response) == 0 {
+			return
+		}
+		serverInfo = nil
 	}
 	if len(response) == 0 && serverInfo != nil {
 		var ttl *uint32
@@ -702,7 +709,10 @@ func (proxy *Proxy) processIncomingQuery(clientProto string, serverProto string,
 						dlog.Warnf("Failed to decrypt response from [%v]", serverName)
 						response = nil
 					}
-				} else if responseCode == 401 {
+				} else if responseCode == 401 || (responseCode == 200 && len(responseBody) == 0) {
+					if responseCode == 200 {
+						dlog.Warnf("ODoH relay for [%v] is buggy and returns a 200 status code instead of 401 after a key update", serverInfo.Name)
+					}
 					dlog.Infof("Forcing key update for [%v]", serverInfo.Name)
 					for _, registeredServer := range proxy.serversInfo.registeredServers {
 						if registeredServer.name == serverInfo.Name {
@@ -710,6 +720,7 @@ func (proxy *Proxy) processIncomingQuery(clientProto string, serverProto string,
 								// Failed to refresh the proxy server information.
 								dlog.Noticef("Key update failed for [%v]", serverName)
 								serverInfo.noticeFailure(proxy)
+								clocksmith.Sleep(10 * time.Second)
 							}
 							break
 						}
