@@ -19,7 +19,7 @@ require (
 	github.com/k-sone/critbitgo v1.4.0
 	github.com/kardianos/service v1.2.0
 	github.com/miekg/dns v1.1.43
-	github.com/powerman/check v1.5.0
+	github.com/powerman/check v1.6.0
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
 	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d
 	golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069
