@@ -36,20 +36,19 @@ type Config struct {
 	DisabledServerNames      []string       `toml:"disabled_server_names"`
 	ListenAddresses          []string       `toml:"listen_addresses"`
 	LocalDoH                 LocalDoHConfig `toml:"local_doh"`
-	Daemonize                bool
-	UserName                 string `toml:"user_name"`
-	ForceTCP                 bool   `toml:"force_tcp"`
-	Timeout                  int    `toml:"timeout"`
-	KeepAlive                int    `toml:"keepalive"`
-	Proxy                    string `toml:"proxy"`
-	CertRefreshDelay         int    `toml:"cert_refresh_delay"`
-	CertIgnoreTimestamp      bool   `toml:"cert_ignore_timestamp"`
-	EphemeralKeys            bool   `toml:"dnscrypt_ephemeral_keys"`
-	LBStrategy               string `toml:"lb_strategy"`
-	LBEstimator              bool   `toml:"lb_estimator"`
-	BlockIPv6                bool   `toml:"block_ipv6"`
-	BlockUnqualified         bool   `toml:"block_unqualified"`
-	BlockUndelegated         bool   `toml:"block_undelegated"`
+	UserName                 string         `toml:"user_name"`
+	ForceTCP                 bool           `toml:"force_tcp"`
+	Timeout                  int            `toml:"timeout"`
+	KeepAlive                int            `toml:"keepalive"`
+	Proxy                    string         `toml:"proxy"`
+	CertRefreshDelay         int            `toml:"cert_refresh_delay"`
+	CertIgnoreTimestamp      bool           `toml:"cert_ignore_timestamp"`
+	EphemeralKeys            bool           `toml:"dnscrypt_ephemeral_keys"`
+	LBStrategy               string         `toml:"lb_strategy"`
+	LBEstimator              bool           `toml:"lb_estimator"`
+	BlockIPv6                bool           `toml:"block_ipv6"`
+	BlockUnqualified         bool           `toml:"block_unqualified"`
+	BlockUndelegated         bool           `toml:"block_undelegated"`
 	Cache                    bool
 	CacheSize                int                         `toml:"cache_size"`
 	CacheNegTTL              uint32                      `toml:"cache_neg_ttl"`
@@ -467,7 +466,6 @@ func ConfigLoad(proxy *Proxy, flags *ConfigFlags) error {
 	proxy.localDoHPath = config.LocalDoH.Path
 	proxy.localDoHCertFile = config.LocalDoH.CertFile
 	proxy.localDoHCertKeyFile = config.LocalDoH.CertKeyFile
-	proxy.daemonize = config.Daemonize
 	proxy.pluginBlockIPv6 = config.BlockIPv6
 	proxy.pluginBlockUnqualified = config.BlockUnqualified
 	proxy.pluginBlockUndelegated = config.BlockUndelegated
