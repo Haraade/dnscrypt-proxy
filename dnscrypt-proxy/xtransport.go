@@ -9,6 +9,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"io"
 	"math/rand"
 	"net"
@@ -279,13 +280,11 @@ func (xTransport *XTransport) rebuildTransport() {
 			if err != nil {
 				return nil, err
 			}
-			var udpConn *net.UDPConn
 			if xTransport.h3UDPConn == nil {
-				udpConn, err = net.ListenUDP("udp", &net.UDPAddr{IP: net.IPv4zero, Port: 0})
+				xTransport.h3UDPConn, err = net.ListenUDP("udp", &net.UDPAddr{IP: net.IPv4zero, Port: 0})
 				if err != nil {
 					return nil, err
 				}
-				xTransport.h3UDPConn = udpConn
 			}
 			return quic.DialEarlyContext(ctx, xTransport.h3UDPConn, udpAddr, host, tlsCfg, cfg)
 		}}
@@ -456,6 +455,9 @@ func (xTransport *XTransport) resolveAndUpdateCache(host string) error {
 		} else {
 			return err
 		}
+	}
+	if foundIP == nil {
+		return fmt.Errorf("no IP address found for [%s]", host)
 	}
 	xTransport.saveCachedIP(host, foundIP, ttl)
 	dlog.Debugf("[%s] IP address [%s] added to the cache, valid for %v", host, foundIP, ttl)
