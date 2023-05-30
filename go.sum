@@ -42,8 +42,8 @@ github.com/jedisct1/go-clocksmith v0.0.0-20230211133011-392c1afea73e h1:tzG4EjKg
 github.com/jedisct1/go-clocksmith v0.0.0-20230211133011-392c1afea73e/go.mod h1:SAINchklztk2jcLWJ4bpNF4KnwDUSUTX+cJbspWC2Rw=
 github.com/jedisct1/go-dnsstamps v0.0.0-20230211133001-124a632de565 h1:BPBMaUCgtmiHvqgugbSuegXjADJfERsPbmRqgdq8Pjo=
 github.com/jedisct1/go-dnsstamps v0.0.0-20230211133001-124a632de565/go.mod h1:mEGEFZsGe4sG5Mb3Xi89pmsy+TZ0946ArbYMGKAM5uA=
-github.com/jedisct1/go-hpke-compact v0.0.0-20230211184420-51d4440017ce h1:RvDulxEuYjqIWSphi54mQGXWDAp0yjeCJQKhBj6Qkmc=
-github.com/jedisct1/go-hpke-compact v0.0.0-20230211184420-51d4440017ce/go.mod h1:T9nvXa0PqmoSt9JhtW0rv9iXg5xoxW/ZfVhdm9Y4QJw=
+github.com/jedisct1/go-hpke-compact v0.0.0-20230513092519-91c912752223 h1:6q4bclrFDC6XhljyqpgnQQJHB0jJ9JCxamxznYjO6e8=
+github.com/jedisct1/go-hpke-compact v0.0.0-20230513092519-91c912752223/go.mod h1:WchTSQZ7F2frIm7p+CtDAWQ7HuTj+bTIMC612B0iMKY=
 github.com/jedisct1/go-minisign v0.0.0-20230410063418-3d885d71f62c h1:SJIUnIcy3NTjPM1acfLsIDQ6dZkBXkQLt/vrg7pshX0=
 github.com/jedisct1/go-minisign v0.0.0-20230410063418-3d885d71f62c/go.mod h1:euIjSueBwqJWwVr7rS2bowelVBVoN827tx5n87jnSJM=
 github.com/jedisct1/xsecretbox v0.0.0-20230211185120-2025cdbb9f0f h1:1qPoL+ur1rCouHMB737ujJGXVFoXGafDY+kmgXjpicA=
@@ -73,15 +73,15 @@ github.com/quic-go/qtls-go1-19 v0.3.2 h1:tFxjCFcTQzK+oMxG6Zcvp4Dq8dx4yD3dDiIiyc8
 github.com/quic-go/qtls-go1-19 v0.3.2/go.mod h1:ySOI96ew8lnoKPtSqx2BlI5wCpUVPT05RMAlajtnyOI=
 github.com/quic-go/qtls-go1-20 v0.2.2 h1:WLOPx6OY/hxtTxKV1Zrq20FtXtDEkeY00CGQm8GEa3E=
 github.com/quic-go/qtls-go1-20 v0.2.2/go.mod h1:JKtK6mjbAVcUTN/9jZpvLbGxvdWIKS8uT7EiStoU1SM=
-github.com/quic-go/quic-go v0.34.0 h1:OvOJ9LFjTySgwOTYUZmNoq0FzVicP8YujpV0kB7m2lU=
-github.com/quic-go/quic-go v0.34.0/go.mod h1:+4CVgVppm0FNjpG3UcX8Joi/frKOH7/ciD5yGcwOO1g=
+github.com/quic-go/quic-go v0.35.0 h1:JXIf219xJK+4qGeY52rlnrVqeB2AXUAwfLU9JSoWXwg=
+github.com/quic-go/quic-go v0.35.0/go.mod h1:+4CVgVppm0FNjpG3UcX8Joi/frKOH7/ciD5yGcwOO1g=
 github.com/smartystreets/assertions v1.2.0 h1:42S6lae5dvLc7BrLu/0ugRtcFVjoJNMC/N3yZFZkDFs=
 github.com/smartystreets/assertions v1.2.0/go.mod h1:tcbTF8ujkAEcZ8TElKY+i30BzYlVhC/LOxJk7iOWnoo=
 github.com/smartystreets/goconvey v1.7.2 h1:9RBaZCeXEQ3UselpuwUQHltGVXvdwm6cv1hgR6gDIPg=
 github.com/smartystreets/goconvey v1.7.2/go.mod h1:Vw0tHAZW6lzCRk3xgdin6fKYcG+G3Pg9vgXWeJpQFMM=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
+github.com/stretchr/testify v1.5.1 h1:nOGnQDM7FYENwehXlg/kFVnos3rEvtKTjRvOWSzb6H4=
 github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=
-github.com/stretchr/testify v1.7.0 h1:nwc3DEeHmmLAfoZucVR881uASk0Mfjw8xYJ99tb5CcY=
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
@@ -138,4 +138,5 @@ gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8
 gopkg.in/natefinch/lumberjack.v2 v2.2.1 h1:bBRl1b0OH9s/DuPhuXpNl+VtCaJXFZ5/uEFST95x9zc=
 gopkg.in/natefinch/lumberjack.v2 v2.2.1/go.mod h1:YD8tP3GAjkrDg1eZH7EGmyESg/lsYskCTPBJVb9jqSc=
 gopkg.in/yaml.v2 v2.2.2/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
+gopkg.in/yaml.v2 v2.4.0 h1:D8xgwECY7CYvx+Y2n4sBz93Jn9JRvxdiyyo8CTfuKaY=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
