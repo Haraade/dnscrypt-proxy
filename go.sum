@@ -41,8 +41,8 @@ github.com/jedisct1/dlog v0.0.0-20230811132706-443b333ff1b3 h1:3wOfILZqpvhb7bNBG
 github.com/jedisct1/dlog v0.0.0-20230811132706-443b333ff1b3/go.mod h1:m25Jh2eJ0FXLWjMXFZItQ24W0HAIjosAe4Z0a+SZitU=
 github.com/jedisct1/go-clocksmith v0.0.0-20230211133011-392c1afea73e h1:tzG4EjKgHIqKVkLIAC4pXTIapuM2BR05uXokEEysAXA=
 github.com/jedisct1/go-clocksmith v0.0.0-20230211133011-392c1afea73e/go.mod h1:SAINchklztk2jcLWJ4bpNF4KnwDUSUTX+cJbspWC2Rw=
-github.com/jedisct1/go-dnsstamps v0.0.0-20230211133001-124a632de565 h1:BPBMaUCgtmiHvqgugbSuegXjADJfERsPbmRqgdq8Pjo=
-github.com/jedisct1/go-dnsstamps v0.0.0-20230211133001-124a632de565/go.mod h1:mEGEFZsGe4sG5Mb3Xi89pmsy+TZ0946ArbYMGKAM5uA=
+github.com/jedisct1/go-dnsstamps v0.0.0-20240423203910-07a0735c7774 h1:DobL5d8UxrYzlD0PbU/EVBAGHuDiFyH46gr6povMw50=
+github.com/jedisct1/go-dnsstamps v0.0.0-20240423203910-07a0735c7774/go.mod h1:mEGEFZsGe4sG5Mb3Xi89pmsy+TZ0946ArbYMGKAM5uA=
 github.com/jedisct1/go-hpke-compact v0.0.0-20230811132953-4ee502b61f80 h1:o6d/E+fxKQrSEOyR7H+Lb3iFMW3daWdq1nsTnQPWaF0=
 github.com/jedisct1/go-hpke-compact v0.0.0-20230811132953-4ee502b61f80/go.mod h1:dwjlOg9tYzZlxyi9HAGJYKUlVe3RZIfXvcni4VUfqRA=
 github.com/jedisct1/go-minisign v0.0.0-20230811132847-661be99b8267 h1:TMtDYDHKYY15rFihtRfck/bfFqNfvcabqvXAFQfAUpY=

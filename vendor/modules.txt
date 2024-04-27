@@ -47,7 +47,7 @@ github.com/jedisct1/dlog
 # github.com/jedisct1/go-clocksmith v0.0.0-20230211133011-392c1afea73e
 ## explicit
 github.com/jedisct1/go-clocksmith
-# github.com/jedisct1/go-dnsstamps v0.0.0-20230211133001-124a632de565
+# github.com/jedisct1/go-dnsstamps v0.0.0-20240423203910-07a0735c7774
 ## explicit; go 1.18
 github.com/jedisct1/go-dnsstamps
 # github.com/jedisct1/go-hpke-compact v0.0.0-20230811132953-4ee502b61f80

@@ -11,7 +11,7 @@ require (
 	github.com/hectane/go-acl v0.0.0-20230122075934-ca0b05cb1adb
 	github.com/jedisct1/dlog v0.0.0-20230811132706-443b333ff1b3
 	github.com/jedisct1/go-clocksmith v0.0.0-20230211133011-392c1afea73e
-	github.com/jedisct1/go-dnsstamps v0.0.0-20230211133001-124a632de565
+	github.com/jedisct1/go-dnsstamps v0.0.0-20240423203910-07a0735c7774
 	github.com/jedisct1/go-hpke-compact v0.0.0-20230811132953-4ee502b61f80
 	github.com/jedisct1/go-minisign v0.0.0-20230811132847-661be99b8267
 	github.com/jedisct1/xsecretbox v0.0.0-20230811132812-b950633f9f1f
