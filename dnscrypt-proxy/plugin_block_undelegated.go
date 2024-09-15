@@ -102,6 +102,7 @@ var undelegatedSet = []string{
 	"98.100.in-addr.arpa",
 	"99.100.in-addr.arpa",
 	"a.e.f.ip6.arpa",
+	"asusrouter",
 	"airdream",
 	"api",
 	"b.e.f.ip6.arpa",
@@ -133,6 +134,7 @@ var undelegatedSet = []string{
 	"lan",
 	"loc",
 	"local",
+	"lokalt",
 	"localdomain",
 	"localhost",
 	"localnet",
@@ -153,6 +155,7 @@ var undelegatedSet = []string{
 	"wlan_ap",
 	"workgroup",
 	"zghjccbob3n0",
+	"unifi",
 }
 
 type PluginBlockUndelegated struct {
