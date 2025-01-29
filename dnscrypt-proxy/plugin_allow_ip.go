@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"net"
-	"strings"
 	"time"
 
 	iradix "github.com/hashicorp/go-immutable-radix"
@@ -24,7 +23,7 @@ func (plugin *PluginAllowedIP) Name() string {
 }
 
 func (plugin *PluginAllowedIP) Description() string {
-	return "Allows DNS queries only from specific IP ranges"
+	return "Allows DNS queries only from the 192.168.0.0/24 network"
 }
 
 func (plugin *PluginAllowedIP) Init(proxy *Proxy) error {
@@ -51,7 +50,8 @@ func (plugin *PluginAllowedIP) Reload() error {
 }
 
 func (plugin *PluginAllowedIP) Eval(pluginsState *PluginsState, msg *dns.Msg) error {
-	clientIPStr := ""
+	var clientIPStr string
+
 	switch pluginsState.clientProto {
 	case "udp":
 		clientIPStr = (*pluginsState.clientAddr).(*net.UDPAddr).IP.String()
