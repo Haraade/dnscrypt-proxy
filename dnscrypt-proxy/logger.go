@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"os"
 
@@ -8,33 +9,37 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-func Logger(logMaxSize int, logMaxAge int, logMaxBackups int, fileName string) io.Writer {
+func Logger(logMaxSize, logMaxAge, logMaxBackups int, fileName string) io.Writer {
 	if fileName == "/dev/stdout" {
 		return os.Stdout
 	}
-	if st, _ := os.Stat(fileName); st != nil && !st.Mode().IsRegular() {
-		if st.Mode().IsDir() {
-			dlog.Fatalf("[%v] is a directory", fileName)
+
+	fileInfo, err := os.Stat(fileName)
+	if err == nil {
+		if fileInfo.IsDir() {
+			dlog.Fatalf("Logger-feil: [%v] er en katalog, ikke en fil", fileName)
 		}
-		fp, err := os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0o644)
-		if err != nil {
-			dlog.Fatalf("Unable to access [%v]: [%v]", fileName, err)
-		}
-		return fp
+	} else if !os.IsNotExist(err) {
+		dlog.Fatalf("Logger-feil: Kunne ikke sjekke [%v]: %v", fileName, err)
 	}
-	if fp, err := os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0o644); err == nil {
-		fp.Close()
-	} else {
-		dlog.Errorf("Unable to create [%v]: [%v]", fileName, err)
+
+	file, err := os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0o644)
+	if err != nil {
+		dlog.Fatalf("Logger-feil: Kunne ikke opprette eller åpne [%v]: %v", fileName, err)
 	}
+	file.Close()
+
 	logger := &lumberjack.Logger{
-		LocalTime:  true,
+		Filename:   fileName,
 		MaxSize:    logMaxSize,
 		MaxAge:     logMaxAge,
 		MaxBackups: logMaxBackups,
-		Filename:   fileName,
 		Compress:   true,
+		LocalTime:  true,
 	}
+
+	fmt.Printf("Logger opprettet: %s (MaxSize: %dMB, MaxAge: %d dager, MaxBackups: %d)\n",
+		fileName, logMaxSize, logMaxAge, logMaxBackups)
 
 	return logger
 }
